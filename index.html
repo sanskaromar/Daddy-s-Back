@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Daddy's Back</title>
+        <style>
+            body,
+            html {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                overflow: hidden;
+            }
+
+            #image-container {
+                width: 100%;
+                height: 100%;
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                transition: opacity 1s ease-in-out;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+
+            #image-container::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: inherit;
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                filter: blur(10px);
+                transform: scale(1.1);
+            }
+
+            #image-container img {
+                display: block;
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                position: relative;
+                z-index: 1;
+            }
+
+            #audio-controls {
+                position: fixed;
+                bottom: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                z-index: 2;
+                background: rgba(0, 0, 0, 0.5);
+                border-radius: 5px;
+                display: flex;
+                align-items: center;
+            }
+
+            #audio-controls button {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 24px;
+                cursor: pointer;
+                padding-inline: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="image-container">
+            <img src="" alt="Daddy's Back Image" />
+        </div>
+        <audio id="background-audio" loop>
+            <source src="assets/audio.mp3" type="audio/mpeg" />
+            ERROR: SKILL ISSUE || Your browser is not cool enough to support the
+            audio element.
+        </audio>
+        <div id="audio-controls">
+            <button id="play-pause">▶️</button>
+        </div>
+        <script>
+            const images = ["assets/1.png", "assets/2.png"];
+            const imageContainer = document.getElementById("image-container");
+            const imgElement = imageContainer.querySelector("img");
+            const audio = document.getElementById("background-audio");
+            const playPauseButton = document.getElementById("play-pause");
+
+            let currentImageIndex = 0;
+
+            function displayNextImage() {
+                imgElement.style.opacity = 0;
+                setTimeout(() => {
+                    imgElement.src = images[currentImageIndex];
+                    imageContainer.style.backgroundImage = `url(${images[currentImageIndex]})`;
+                    imgElement.style.opacity = 1;
+                    currentImageIndex = (currentImageIndex + 1) % images.length;
+                }, 1000);
+            }
+
+            displayNextImage();
+            setInterval(displayNextImage, 20000);
+
+            playPauseButton.addEventListener("click", () => {
+                if (audio.paused) {
+                    audio.play();
+                    playPauseButton.textContent = "⏸️";
+                } else {
+                    audio.pause();
+                    playPauseButton.textContent = "▶️";
+                }
+            });
+
+            document.addEventListener(
+                "click",
+                () => {
+                    if (audio.paused) {
+                        audio.play();
+                        playPauseButton.textContent = "⏸️";
+                    }
+                },
+                { once: true }
+            );
+        </script>
+    </body>
+</html>
